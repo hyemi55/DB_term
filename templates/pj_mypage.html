@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>my page</title>
+</head>
+<body>
+<div style="float:right">
+<p style="margin:0; display:inline">ID:</p>
+<form action="/userinfo" method="post" style="display:inline">
+    <input type="submit" id="uid" name="uid" value={{ myid }}>
+    <input type="hidden" name="send" value="none">
+</form>
+
+<form action="/mainpage" method="get">
+    <input type="submit" id="tomain" name="tomain" value="Main Page">
+    <input type="hidden" id="or_type" name="send" value="latest">
+    <input type="hidden" id="whose" name="whose" value="none">
+</form>
+</div>
+
+<h2>{{ myid }}</h2>
+
+<h3>[Reviews]</h3>
+<table border="1">
+    <thead>
+        <th>ratings</th>
+        <th>movies</th>
+        <th>review</th>
+        <th>time</th>
+    </thead>
+    <tbody>
+        {% for review in reviews %}
+        <tr>
+            <td>{{ review[0] }}</td>
+            <td>
+                <form action="/movieinfo" method="post">
+                    <input type="submit" id="title" name="title" value="{{ review[1] }}">
+                    <input type="hidden" id="movie_id" name="movie_id" value="{{ review[4] }}">
+                    <input type="hidden" id="isUpdate" name="isUpdate" value="noUpdate">
+                </form>
+            </td>
+            <td>{{ review[2] }}</td>
+            <td>{{ review[3] }}</td>
+            <td>
+                <form action="/userinfo" method="post">
+                    <input type="submit" name="send" value="Del">
+                    <input type="hidden" name="uid" value="{{ myid }}">
+                    <input type="hidden" name="mid" value="{{ review[4] }}">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr style="margin-top: 32px"/>
+
+<h3>[Followers]</h3>
+{% for follower in followers %}
+<form action="/userinfo" method="post">
+    <input type="submit" name="uid" value="{{ follower[0] }}">
+    <input type="hidden" name="send" value="none">
+</form>
+{% endfor %}
+<hr style="margin-top: 32px"/>
+
+<div id="fmd">
+<h3>[Followed]</h3>
+<table border="1">
+    <thead>
+        <th>user</th>
+        <th>unfollow</th>
+    </thead>
+    <tbody>
+        {% for user in followed %}
+        <tr>
+            <td>
+                <form action="userinfo" method="post">
+                    <input type="submit" name="uid" value="{{ user[0] }}">
+                    <input type="hidden" name="send" value="none">
+                </form>
+            </td>
+            <td>
+                <form action="userinfo" method="post">
+                    <input type="submit" name="send" value="unfollow">
+                    <input type="hidden" name="uid" value="{{ uid }}">
+                    <input type="hidden" name="opid" value="{{ user[0] }}">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>[Muted]</h3>
+<table border="1">
+    <thead>
+        <th>user</th>
+        <th>unmute</th>
+    </thead>
+    <tbody>
+        {% for user in muted %}
+        <tr>
+            <td>
+                <form action="userinfo" method="post">
+                    <input type="submit" name="uid" value="{{ user[0] }}">
+                    <input type="hidden" name="send" value="none">
+                </form>
+            </td>
+            <td>
+                <form action="userinfo" method="post">
+                    <input type="submit" name="send" value="unmute">
+                    <input type="hidden" name="uid" value="{{ uid }}">
+                    <input type="hidden" name="opid" value="{{ user[0] }}">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+    <hr style="margin-top: 32px"/>
+</div>
+
+<div id="add_movie" style="display:none">
+<h3>[Add Movie]</h3>
+<form action="/userinfo" method="post">
+    <label for="add_title" >Title:</label><br>
+    <input type="text" id="add_title" name="add_title"><br>
+
+    <label for="add_director">Director:</label><br>
+    <input type="text" id="add_director" name="add_director"><br>
+
+    <label for="add_genre">Genre:</label><br>
+    <select id="add_genre" name="add_genre">
+        <option value="action" selected>action</option>
+        <option value="comedy">comedy</option>
+        <option value="drama">drama</option>
+        <option value="fantasy">fantasy</option>
+        <option value="horror">horror</option>
+        <option value="mystery">mystery</option>
+        <option value="romance">romance</option>
+        <option value="thriller">thriller</option>
+        <option value="western">western</option>
+    </select><br>
+
+    <label for="add_date">Release Date:</label><br>
+    <input type="date" id="add_date" name="add_date"><br>
+
+    <input type="submit" name="send" value="Add">
+    <input type="hidden" name="uid" value="{{ uid }}">
+</form>
+</div>
+</body>
+<script>
+    if ('{{ role }}' == 'admin') {
+        document.getElementById("fmd").style.display='none';
+        document.getElementById("add_movie").style.display='block';
+    }
+</script>
+</html>

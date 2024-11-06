@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>main</title>
+</head>
+
+<body>
+<div style="float:right">
+<p style="margin:0; display:inline">ID:</p>
+<form action="/userinfo" method="post" style="display:inline">
+    <input type="submit" name="uid" value={{ myid }}>
+    <input type="hidden" name="send" value="none">
+</form>
+</div>
+
+<h2>Movies</h2>
+
+<form action="/mainpage" method="get">
+    <input type="submit" id="or_latest_m" name="send" value="latest">
+    <input type="submit" id="or_genre" name="send" value="genre">
+    <input type="submit" id="or_ratings" name="send" value="ratings">
+    <input type="text" name="search">
+    <input type="submit" name="send" value="search">
+    <input type="hidden" id="or_movie" name="whose" value="or_movies">
+</form>
+
+<table border="1">
+    <thead>
+        <th>title</th>
+        <th>ratings</th>
+        <th>director</th>
+        <th>genre</th>
+        <th>release date</th>
+    </thead>
+    <tbody>
+        {% for movie in movies %}
+        <tr>
+            <td>
+                <form action="/movieinfo" method="post">
+                    <input type="submit" id="title1" name="title" value="{{ movie[0] }}">
+                    <input type="hidden" id="movie_id1" name="movie_id" value={{ movie[5] }}>
+                    <input type="hidden" id="isUpdate1" name="isUpdate" value="noUpdate">
+                </form>
+            </td>
+            <td>{{ movie[1] }}</td>
+            <td>{{ movie[2] }}</td>
+            <td>{{ movie[3] }}</td>
+            <td>{{ movie[4] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr style="margin-top: 32px"/>
+
+<h2>Reviews</h2>
+
+<form action="/mainpage" method="get">
+    <input type="submit" id="or_latest_r" name="send" value="latest">
+    <input type="submit" id="or_title" name="send" value="title">
+    <input type="submit" id="or_followers" name="send" value="followers">
+    <input type="hidden" id="or_review" name="whose" value="or_reviews">
+</form>
+
+<table border="1">
+    <thead>
+        <th>ratings</th>
+        <th>user</th>
+        <th>title</th>
+        <th>review</th>
+        <th>time</th>
+    </thead>
+    <tbody>
+        {% for review in reviews %}
+        <tr>
+            <td>{{ review[0] }}</td>
+            <td>
+                <form action="/userinfo" method="post">
+                    <input type="submit" id="uid" name="uid" value={{ review[1] }}>
+                    <input type="hidden" name="send" value="none">
+                </form>
+            </td>
+            <td>
+                <form action="/movieinfo" method="post">
+                    <input type="submit" id="title2" name="title" value="{{ review[2] }}">
+                    <input type="hidden" id="movie_id2" name="movie_id" value={{ review[5] }}>
+                    <input type="hidden" id="isUpdate2" name="isUpdate" value="noUpdate">
+                </form>
+            </td>
+            <td>{{ review[3] }}</td>
+            <td>{{ review[4] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

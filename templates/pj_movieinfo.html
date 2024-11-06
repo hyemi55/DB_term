@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>movie info</title>
+</head>
+<body>
+<div style="float:right">
+<p style="margin:0; display:inline">ID:</p>
+<form action="/userinfo" method="post" style="display:inline">
+    <input type="submit" id="uid" name="uid" value={{ myid }}>
+    <input type="hidden" name="send" value="none">
+</form>
+
+<form action="/mainpage" method="get">
+    <input type="submit" id="tomain" name="tomain" value="Main Page">
+    <input type="hidden" id="or_type" name="send" value="latest">
+    <input type="hidden" id="whose" name="whose" value="none">
+</form>
+</div>
+
+<h2>{{ movie[0][0] }}</h2>
+
+<table border="1">
+    <thead>
+        <th>director</th>
+        <th>genre</th>
+        <th>release date</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ movie[0][2] }}</td>
+            <td>{{ movie[0][3] }}</td>
+            <td>{{ movie[0][4] }}</td>
+        </tr>
+    </tbody>
+</table>
+<hr style="margin-top: 32px"/>
+
+<h3>[Reviews]</h3>
+<h4>
+    Average Rating: {{ movie[0][1] }}
+</h4>
+<table border="1">
+    <thead>
+        <th>ratings</th>
+        <th>user</th>
+        <th>review</th>
+        <th>time</th>
+    </thead>
+    <tbody>
+        {% for review in reviews %}
+        <tr>
+            <td>{{ review[0] }}</td>
+            <td>
+                <form action="/userinfo" method="post">
+                    <input type="submit" name="uid" value={{ review[1] }}>
+                    <input type="hidden" name="send" value="none">
+                </form>
+            </td>
+            <td>{{ review[2] }}</td>
+            <td>{{ review[3] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr style="margin-top: 32px"/>
+
+<h4 style="display:inline"> My Review: </h4>
+<form action="/movieinfo" method="post" style="display:inline">
+    <select id="rating" name="rating">
+        <option value={{ my_review[0] }} selected hidden>{{ my_review[0] }}</option>
+        <option value="5">5</option>
+        <option value="4">4</option>
+        <option value="3">3</option>
+        <option value="2">2</option>
+        <option value="1">1</option>
+    </select><br>
+    <textarea id="my_review" name="my_review" rows="3" cols="70">{{ my_review[2] }}</textarea><br>
+    <input type="submit" id="send" name="send" value="submit">
+    <input type="hidden" id="isUpdate" name="isUpdate" value="Update">
+    <input type="hidden" id="movie_id" name="movie_id" value={{ movie[0][5] }}>
+</form>
+
+</body>
+</html>

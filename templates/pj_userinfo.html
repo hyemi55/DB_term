@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>user info</title>
+</head>
+<body>
+<div style="float:right">
+<p style="margin:0; display:inline">ID:</p>
+<form action="/userinfo" method="post" style="display:inline">
+    <input type="submit" id="uid" name="uid" value={{ myid }}>
+    <input type="hidden" name="send" value="none">
+</form>
+
+<form action="/mainpage" method="get">
+    <input type="submit" id="tomain" name="tomain" value="Main Page">
+    <input type="hidden" id="or_type" name="send" value="latest">
+    <input type="hidden" id="whose" name="whose" value="none">
+</form>
+</div>
+
+<h2>{{ uid }}</h2>
+
+<form action="/userinfo" method="post" id="fm">
+    <input type="submit" id="follow" name="send" value="follow">
+    <input type="submit" id="mute" name="send" value="mute">
+    <input type="hidden" name="uid" value="{{ uid }}">
+</form>
+
+<h3>[Reviews]</h3>
+<table border="1">
+    <thead>
+        <th>ratings</th>
+        <th>movies</th>
+        <th>review</th>
+        <th>time</th>
+    </thead>
+    <tbody>
+        {% for review in reviews %}
+        <tr>
+            <td>{{ review[0] }}</td>
+            <td>
+                <form action="/movieinfo" method="post">
+                    <input type="submit" id="title" name="title" value="{{ review[1] }}">
+                    <input type="hidden" id="movie_id" name="movie_id" value="{{ review[4] }}">
+                    <input type="hidden" id="isUpdate" name="isUpdate" value="noUpdate">
+                </form>
+            </td>
+            <td>{{ review[2] }}</td>
+            <td>{{ review[3] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr style="margin-top: 32px"/>
+
+<h3>[Followers]</h3>
+{% for follower in followers %}
+<form action="/userinfo" method="post">
+    <input type="submit" name="uid" value="{{ follower[0] }}">
+    <input type="hidden" name="send" value="none">
+</form>
+{% endfor %}
+</body>
+<script>
+    if ('{{ role }}' == 'admin') {
+        document.getElementById("fm").style.display='none';
+    }
+</script>
+</html>
